@@ -6,7 +6,7 @@ import { updateProfile } from "firebase/auth";
 import { auth } from "../firebase/firebase.config";
 
 const Register = () => {
-  const { signInGoogle, createUser } = useContext(AuthContext);
+  const { signInGoogle, createUser, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [passwordError, setPasswordError] = useState("");
@@ -42,26 +42,36 @@ const Register = () => {
       setLoading(false);
       return;
     }
-
     // ✅ Create user
     createUser(email, password)
       .then((result) => {
-        console.log(result.user);
+        console.log(result);
         // 🔄 Update display name & photo
         updateProfile(auth.currentUser, {
           displayName: name || "Anonymous User",
           photoURL:
-            photoURL || "https://img.icons8.com/?size=100&id=11781&format=png",
+            photoURL || "https://img.icons8.com/?size=100&id=14736&format=png",
         })
           .then(() => {
+            // 👇 update context manually
+            setUser({
+              ...auth.currentUser,
+              displayName: name || "Anonymous User",
+              photoURL:
+                photoURL ||
+                "https://img.icons8.com/?size=100&id=14736&format=png",
+            });
+
             toast.success("Registration successful!");
             navigate("/");
           })
+
           .catch((error) => {
             console.error("Profile update error:", error.message);
             toast.error("Could not update profile info.");
           });
       })
+
       .catch((error) => {
         console.error("Registration error:", error.message);
         if (error.code === "auth/email-already-in-use") {

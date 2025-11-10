@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom"; // ✅ use react-router-dom, not "react-router"
 import { AuthContext } from "../Contexts/AuthContext";
 import { toast } from "react-hot-toast";
+import logo from "../assets/logo.jpg";
 
 const NavBar = () => {
   const { user, signOutUser } = useContext(AuthContext); // ✅ use useContext, not use()
@@ -56,8 +57,20 @@ const NavBar = () => {
         </div>
 
         {/* App Name */}
-        <Link to="/" className="btn btn-ghost text-xl font-bold">
-          AI Model Manager
+        <Link
+          to="/"
+          className="flex items-center gap-2 hover:opacity-90 transition"
+        >
+          <div className="bg-primary rounded-full h-10 w-10 flex items-center justify-center overflow-hidden shadow-md">
+            <img
+              src={logo}
+              alt="AI Model Manager Logo"
+              className="object-cover w-full h-full"
+            />
+          </div>
+          <span className="text-xl font-bold text-primary">
+            AI Model Manager
+          </span>
         </Link>
       </div>
 
@@ -71,7 +84,7 @@ const NavBar = () => {
             <Link to="/add-model">Add Model</Link>
           </li>
           <li>
-            <Link to="/view-models">View Models</Link>
+            <Link to="/models">View Models</Link>
           </li>
         </ul>
       </div>
