@@ -1,46 +1,57 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../Contexts/AuthContext";
 import { toast } from "react-hot-toast";
 import { updateProfile } from "firebase/auth";
+import { auth } from "../firebase/firebase.config";
 
 const Register = () => {
   const { signInGoogle, createUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   // ------------------ Handle Manual Registration ------------------
   const handleCreateUser = (e) => {
     e.preventDefault();
+    setLoading(true);
+    setPasswordError("");
 
     const form = e.target;
-    const name = form.name.value;
-    const email = form.email.value;
-    const photoURL = form.photoURL.value;
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const photoURL = form.photoURL.value.trim();
     const password = form.password.value;
 
     // 🔍 Password validation
     if (!/[A-Z]/.test(password)) {
+      setPasswordError("Password must contain at least one uppercase letter.");
       toast.error("Password must contain at least one uppercase letter.");
+      setLoading(false);
       return;
     }
     if (!/[a-z]/.test(password)) {
+      setPasswordError("Password must contain at least one lowercase letter.");
       toast.error("Password must contain at least one lowercase letter.");
+      setLoading(false);
       return;
     }
     if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.");
       toast.error("Password must be at least 6 characters long.");
+      setLoading(false);
       return;
     }
 
     // ✅ Create user
     createUser(email, password)
       .then((result) => {
-        const user = result.user;
-
+        console.log(result.user);
         // 🔄 Update display name & photo
-        updateProfile(user, {
-          displayName: name,
-          photoURL: photoURL,
+        updateProfile(auth.currentUser, {
+          displayName: name || "Anonymous User",
+          photoURL:
+            photoURL || "https://img.icons8.com/?size=100&id=11781&format=png",
         })
           .then(() => {
             toast.success("Registration successful!");
@@ -48,30 +59,36 @@ const Register = () => {
           })
           .catch((error) => {
             console.error("Profile update error:", error.message);
+            toast.error("Could not update profile info.");
           });
       })
       .catch((error) => {
         console.error("Registration error:", error.message);
-        if (error.message.includes("email-already-in-use")) {
+        if (error.code === "auth/email-already-in-use") {
           toast.error("Email already in use.");
         } else {
-          toast.error("Registration failed.");
+          toast.error(error.message);
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
   // ------------------ Google Sign-In ------------------
   const handleGoogleSignIn = () => {
+    setLoading(true);
     signInGoogle()
       .then((result) => {
-        console.log("Google user:", result.user);
+        console.log(result.user);
         toast.success("Registered with Google!");
         navigate("/");
       })
       .catch((error) => {
         console.error(error.message);
         toast.error("Google Sign-in failed");
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   // ------------------ UI ------------------
@@ -119,11 +136,19 @@ const Register = () => {
               required
             />
 
+            {/* 💡 Show hint only if user tried & failed password validation */}
+            {passwordError && (
+              <small className="text-xs text-red-500 mt-1 block">
+                {passwordError}
+              </small>
+            )}
+
             <button
               type="submit"
+              disabled={loading}
               className="btn btn-neutral mt-4 w-full text-lg"
             >
-              Register
+              {loading ? "Registering..." : "Register"}
             </button>
           </fieldset>
         </form>
@@ -133,6 +158,7 @@ const Register = () => {
         {/* Google Sign-In */}
         <button
           onClick={handleGoogleSignIn}
+          disabled={loading}
           className="btn bg-white text-black border-[#e5e5e5] w-full flex items-center justify-center gap-2"
         >
           <svg
