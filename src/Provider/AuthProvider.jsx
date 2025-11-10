@@ -38,15 +38,24 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      console.log("current user", currentUser);
+      if (currentUser) {
+        setUser({
+          ...currentUser,
+          photoURL:
+            currentUser.photoURL ||
+            "https://img.icons8.com/?size=100&id=12438&format=png",
+        });
+      } else {
+        setUser(null);
+      }
 
+      console.log("current user", currentUser);
       setLoading(false);
     });
-    return () => {
-      unsubscribe();
-    };
+
+    return () => unsubscribe();
   }, []);
+
   const authInfo = {
     user,
     loading,

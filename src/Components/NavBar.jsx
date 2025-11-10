@@ -1,14 +1,20 @@
-import React, { use } from "react";
-import { Link } from "react-router";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom"; // ✅ use react-router-dom, not "react-router"
 import { AuthContext } from "../Contexts/AuthContext";
+import { toast } from "react-hot-toast";
 
 const NavBar = () => {
-  const { user } = use(AuthContext);
-
-  // const user = null; // uncomment this line to test when not logged in
+  const { user, signOutUser } = useContext(AuthContext); // ✅ use useContext, not use()
 
   const handleLogout = () => {
-    console.log("User logged out");
+    signOutUser()
+      .then(() => {
+        toast.success("Logged out successfully");
+      })
+      .catch((error) => {
+        console.error("Logout error:", error.message);
+        toast.error("Logout failed");
+      });
   };
 
   return (
@@ -48,12 +54,14 @@ const NavBar = () => {
             </li>
           </ul>
         </div>
+
+        {/* App Name */}
         <Link to="/" className="btn btn-ghost text-xl font-bold">
           AI Model Manager
         </Link>
       </div>
 
-      {/* Navbar Center (desktop) */}
+      {/* Navbar Center (Desktop Menu) */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
@@ -68,7 +76,7 @@ const NavBar = () => {
         </ul>
       </div>
 
-      {/* Navbar End */}
+      {/* Navbar End (User Section) */}
       <div className="navbar-end">
         {user ? (
           <div className="dropdown dropdown-end">
@@ -78,7 +86,15 @@ const NavBar = () => {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full">
-                <img src={user.photoURL} alt="User Profile" />
+                <img
+                  src={
+                    user.photoURL
+                      ? user.photoURL
+                      : "https://img.icons8.com/?size=100&id=12438&format=png"
+                  }
+                  alt="User Profile"
+                  referrerPolicy="no-referrer"
+                />
               </div>
             </div>
             <ul
@@ -101,7 +117,7 @@ const NavBar = () => {
             </ul>
           </div>
         ) : (
-          <Link to="/logIn" className="btn btn-outline btn-primary">
+          <Link to="/login" className="btn btn-outline btn-primary">
             Login
           </Link>
         )}
