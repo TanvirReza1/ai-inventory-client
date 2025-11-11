@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const MyModels = () => {
   const { user } = useContext(AuthContext);
   const [models, setModels] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,8 +14,17 @@ const MyModels = () => {
     fetch(`http://localhost:3000/models/user/${user.email}`)
       .then((res) => res.json())
       .then((data) => setModels(data))
-      .catch((err) => console.error("Error fetching user's models:", err));
+      .catch((err) => console.error("Error fetching user's models:", err))
+      .finally(() => setLoading(false));
   }, [user]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <span className="loading loading-dots loading-xl"></span>
+      </div>
+    );
+  }
 
   if (!user) {
     return (

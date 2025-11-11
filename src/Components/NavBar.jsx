@@ -51,7 +51,7 @@ const NavBar = () => {
               <Link to="/add-model">Add Model</Link>
             </li>
             <li>
-              <Link to="//my-models">View Models</Link>
+              <Link to="/models">View Models</Link>
             </li>
           </ul>
         </div>

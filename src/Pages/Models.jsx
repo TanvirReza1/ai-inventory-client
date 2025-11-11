@@ -3,14 +3,23 @@ import { Link } from "react-router-dom";
 
 const Models = () => {
   const [models, setModels] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("http://localhost:3000/models") // your backend endpoint
       .then((res) => res.json())
       .then((data) => setModels(data))
-      .catch((err) => console.error("Error loading models:", err));
+      .catch((err) => console.error("Error loading models:", err))
+      .finally(() => setLoading(false));
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <span className="loading loading-dots loading-xl"></span>
+      </div>
+    );
+  }
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold text-center mb-6">All AI Models</h1>

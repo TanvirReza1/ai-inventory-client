@@ -5,15 +5,25 @@ import { Link } from "react-router-dom";
 const MyModelPurchases = () => {
   const { user } = useContext(AuthContext);
   const [purchasedModels, setPurchasedModels] = useState([]);
+  const [loading, setLoading] = useState(true); // <-- loading state
 
   useEffect(() => {
     if (user?.email) {
       fetch(`http://localhost:3000/purchases/${user.email}`)
         .then((res) => res.json())
         .then((data) => setPurchasedModels(data))
-        .catch((err) => console.error("Error fetching purchased models:", err));
+        .catch((err) => console.error("Error fetching purchased models:", err))
+        .finally(() => setLoading(false));
     }
   }, [user]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <span className="loading loading-dots loading-xl"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
