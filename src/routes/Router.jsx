@@ -6,6 +6,7 @@ import Models from "../Pages/Models";
 import ModelDetails from "../Pages/ModelDetails";
 import Home from "../Pages/Home";
 import UpdateModel from "../Pages/UpdateModel";
+import MyModels from "../Pages/MyModels";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/update-model/:id",
         element: <UpdateModel></UpdateModel>,
+      },
+      {
+        path: "/my-models",
+        Component: MyModels,
       },
     ],
   },
