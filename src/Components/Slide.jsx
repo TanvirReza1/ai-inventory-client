@@ -5,8 +5,7 @@ const Slide = () => {
   const banners = [
     {
       id: 1,
-      image:
-        "/images/banner1.jpg", 
+      image: "/images/banner1.jpg",
       title: "Explore Powerful AI Models",
       desc: "Discover, compare, and purchase AI models built for your business.",
     },
@@ -35,7 +34,7 @@ const Slide = () => {
   }, [banners.length]);
 
   return (
-    <div className="relative w-full h-[70vh] overflow-hidden rounded-2xl shadow-lg">
+    <div className="relative  h-[70vh] overflow-hidden rounded-2xl shadow-lg">
       {banners.map((item, index) => (
         <div
           key={item.id}

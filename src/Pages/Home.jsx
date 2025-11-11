@@ -44,9 +44,11 @@ const Home = () => {
       </section>
 
       {/* 🧩 Static Section 1 */}
-      <section className="bg-gray-50 p-8 rounded-xl">
-        <h2 className="text-3xl font-bold mb-4 text-center">About AI Models</h2>
-        <p className="text-gray-700 leading-relaxed max-w-3xl mx-auto text-center">
+      <section className=" p-8 rounded-xl">
+        <h2 className="text-3xl text-white-700 font-bold mb-4 text-center">
+          About AI Models
+        </h2>
+        <p className="text-white-700 leading-relaxed max-w-3xl mx-auto text-center">
           AI models are computer algorithms trained to recognize patterns and
           make intelligent decisions. They power modern applications like
           chatbots, image recognition, and recommendation systems. These models
@@ -56,7 +58,7 @@ const Home = () => {
       </section>
 
       {/* 🚀 Static Section 2 */}
-      <section className="text-center p-8 bg-blue-600 text-white rounded-xl">
+      <section className="text-center p-8 bg-blue-600 text-white rounded-xl max-w-[700px] mx-auto">
         <h2 className="text-3xl font-bold mb-4">Get Started</h2>
         <p className="mb-6">
           Join us today and start managing your AI models easily.
