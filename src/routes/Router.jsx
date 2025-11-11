@@ -8,6 +8,7 @@ import Home from "../Pages/Home";
 import UpdateModel from "../Pages/UpdateModel";
 import MyModels from "../Pages/MyModels";
 import MyModelPurchases from "../Pages/MyPurchase";
+import AddModel from "../Pages/AddModel";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/my-purchase",
         Component: MyModelPurchases,
+      },
+      {
+        path: "add-model",
+        Component: AddModel,
       },
     ],
   },
