@@ -10,6 +10,7 @@ import MyModels from "../Pages/MyModels";
 import MyModelPurchases from "../Pages/MyPurchase";
 import AddModel from "../Pages/AddModel";
 import PrivateRoute from "../Private/PrivateRoute";
+import ErrorPage from "../Pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
             <AddModel></AddModel>
           </PrivateRoute>
         ),
+      },
+      {
+        path: "*",
+        Component: ErrorPage,
       },
     ],
   },

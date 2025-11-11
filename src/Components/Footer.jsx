@@ -41,7 +41,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="footer p-6 md:p-10 bg-base-200 text-base-content border-t">
+    <footer className="w-full footer p-6 md:p-10  border-t bg-gray-900 text-gray-300 py-6 mt-10 text-center">
       <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
         {/* Left: Logo and project title */}
         <div className="flex items-center gap-3">
@@ -68,7 +68,7 @@ const Footer = () => {
                 href={r.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-2 rounded hover:bg-base-300 transition"
+                className="inline-flex items-center gap-2 px-3 py-2 rounded transition hover:text-blue-400 hover:bg-gray-800"
                 aria-label={`Open ${r.name} repository`}
               >
                 <svg
