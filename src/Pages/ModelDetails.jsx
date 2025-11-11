@@ -31,6 +31,9 @@ const ModelDetails = () => {
       modelId: _id,
       name,
       framework,
+      image,
+      createdBy,
+      useCase,
       buyerEmail: user.email,
       date: new Date(),
     };

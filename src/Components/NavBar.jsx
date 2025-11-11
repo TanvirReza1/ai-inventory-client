@@ -119,7 +119,7 @@ const NavBar = () => {
                 <span className="text-xs text-gray-500">{user.email}</span>
               </li>
               <li>
-                <Link to="/my-purchases">My Purchases</Link>
+                <Link to="/my-purchase">My Purchases</Link>
               </li>
               <li>
                 <Link to="/my-models">My Models</Link>

@@ -7,6 +7,7 @@ import ModelDetails from "../Pages/ModelDetails";
 import Home from "../Pages/Home";
 import UpdateModel from "../Pages/UpdateModel";
 import MyModels from "../Pages/MyModels";
+import MyModelPurchases from "../Pages/MyPurchase";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/my-models",
         Component: MyModels,
+      },
+      {
+        path: "/my-purchase",
+        Component: MyModelPurchases,
       },
     ],
   },
