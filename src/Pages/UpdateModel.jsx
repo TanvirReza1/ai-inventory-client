@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { AuthContext } from "../Contexts/AuthContext";
 
 const UpdateModel = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [model, setModel] = useState(null);
+  const { user } = use(AuthContext);
 
   // ✅ Fetch the current model data to pre-fill the form
   useEffect(() => {
@@ -25,7 +27,6 @@ const UpdateModel = () => {
       framework: form.framework.value,
       useCase: form.useCase.value,
       description: form.description.value,
-      price: parseFloat(form.price.value),
       image: form.image.value,
     };
 
@@ -33,6 +34,7 @@ const UpdateModel = () => {
       method: "PUT",
       headers: {
         "content-type": "application/json",
+        authorization: `Bearer ${user?.accessToken}`,
       },
       body: JSON.stringify(updatedModel),
     })
@@ -42,10 +44,18 @@ const UpdateModel = () => {
           Swal.fire({
             icon: "success",
             title: "Updated Successfully!",
-            timer: 1500,
+            timer: 1200,
+            showConfirmButton: false,
+          }).then(() => {
+            navigate(`/models/${id}`); // ✅ redirect happens *after* alert closes
+          });
+        } else {
+          Swal.fire({
+            icon: "info",
+            title: "No changes detected",
+            timer: 1200,
             showConfirmButton: false,
           });
-          navigate(`/models/${id}`); // ✅ Redirect after success
         }
       })
       .catch((err) => console.error("Error updating model:", err));
@@ -56,7 +66,7 @@ const UpdateModel = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto bg-white shadow-md p-6 rounded-lg mt-10">
+    <div className="max-w-2xl mx-auto shadow-md p-6 rounded-lg mt-10">
       <h2 className="text-2xl font-semibold mb-4 text-center">Update Model</h2>
       <form onSubmit={handleUpdate} className="space-y-4">
         <div>
@@ -99,17 +109,6 @@ const UpdateModel = () => {
             defaultValue={model.description}
             className="textarea textarea-bordered w-full"
           ></textarea>
-        </div>
-
-        <div>
-          <label className="block font-medium">Price ($)</label>
-          <input
-            type="number"
-            name="price"
-            defaultValue={model.price}
-            className="input input-bordered w-full"
-            required
-          />
         </div>
 
         <div>

@@ -65,7 +65,12 @@ const ModelDetails = () => {
     try {
       const res = await fetch(
         `http://localhost:3000/models/${_id}?email=${user.email}`,
-        { method: "DELETE" }
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${user?.accessToken}`,
+          },
+        }
       );
       const data = await res.json();
 
