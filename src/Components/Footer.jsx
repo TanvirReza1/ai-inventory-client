@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../assets/logo.jpg";
+import { FaSquareXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   const repos = [
@@ -13,17 +14,43 @@ const Footer = () => {
     },
   ];
 
+  // ✅ Fixed socials array — removed the stray <path> outside object
+  const socials = [
+    {
+      name: "Facebook",
+      url: "https://www.facebook.com/Tanvirhossain.reza/",
+      svg: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          className="fill-current"
+        >
+          <path d="M9 8H6v4h3v12h5V12h3.642l.358-4h-4V6.333C14 5.378 14.192 5 15.115 5H18V0h-3.808C10.596 0 9 1.583 9 4.615V8z"></path>
+        </svg>
+      ),
+    },
+    {
+      name: "X (Twitter)",
+      url: "https://x.com/reza_tanvi18747",
+      svg: <FaSquareXTwitter size={24} />, // ✅ clean new X icon
+    },
+  ];
+
   const year = new Date().getFullYear();
 
   return (
     <footer className="footer p-6 md:p-10 bg-base-200 text-base-content border-t">
-      <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
-        {/* Left: logo / project name */}
+      <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
+        {/* Left: Logo and project title */}
         <div className="flex items-center gap-3">
-          {/* Simple circular AI icon */}
-
-          <div className="bg-primary text-white font-bold text-lg flex items-center justify-center h-10 w-10 rounded-full shadow-md">
-            <img src={logo} alt="" />
+          <div className="h-10 w-10 rounded-full overflow-hidden shadow-md">
+            <img
+              src={logo}
+              alt="AI Inventory Logo"
+              className="h-full w-full object-cover"
+            />
           </div>
           <div>
             <div className="font-bold text-lg">AI Inventory Manager</div>
@@ -31,7 +58,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Middle: GitHub Repos */}
+        {/* Middle: GitHub Repositories */}
         <div className="flex flex-col items-center md:items-start">
           <div className="mb-2 font-medium">GitHub Repositories</div>
           <div className="flex gap-3 flex-wrap justify-center">
@@ -44,7 +71,6 @@ const Footer = () => {
                 className="inline-flex items-center gap-2 px-3 py-2 rounded hover:bg-base-300 transition"
                 aria-label={`Open ${r.name} repository`}
               >
-                {/* GitHub Icon */}
                 <svg
                   className="h-5 w-5"
                   viewBox="0 0 24 24"
@@ -63,10 +89,26 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Right: copyright */}
-        <div className="text-sm opacity-80 text-center md:text-right">
-          <div>© {year} AI Inventory Manager</div>
-          <div className="mt-1">Made with ❤️ by Tanvir Reza</div>
+        {/* Right: Social Links & Copyright */}
+        <div className="flex flex-col items-center md:items-end gap-3">
+          <div className="flex gap-4">
+            {socials.map((s) => (
+              <a
+                key={s.name}
+                href={s.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.name}
+                className="hover:text-primary transition"
+              >
+                {s.svg}
+              </a>
+            ))}
+          </div>
+          <div className="text-sm opacity-80 text-center md:text-right">
+            <div>© {year} AI Inventory Manager</div>
+            <div className="mt-1">Made with ❤️ by Tanvir Reza</div>
+          </div>
         </div>
       </div>
     </footer>

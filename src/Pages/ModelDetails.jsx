@@ -53,12 +53,29 @@ const ModelDetails = () => {
       text: "This model will be deleted permanently!",
       icon: "warning",
       showCancelButton: true,
+      confirmButtonText: "Yes, delete it",
+      cancelButtonText: "Cancel",
     });
+
     if (!confirm.isConfirmed) return;
 
-    await fetch(`http://localhost:3000/models/${_id}`, { method: "DELETE" });
-    Swal.fire("Deleted!", "Model has been removed.", "success");
-    navigate("/models");
+    try {
+      const res = await fetch(
+        `http://localhost:3000/models/${_id}?email=${user.email}`,
+        { method: "DELETE" }
+      );
+      const data = await res.json();
+
+      if (res.ok && data.deletedCount > 0) {
+        Swal.fire("Deleted!", "Model has been removed.", "success");
+        navigate("/models");
+      } else {
+        Swal.fire("Error", data.message || "Failed to delete model.", "error");
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+      Swal.fire("Error", "Something went wrong.", "error");
+    }
   };
 
   return (
@@ -96,7 +113,7 @@ const ModelDetails = () => {
         {user?.email === createdBy && (
           <>
             <button
-              onClick={() => navigate(`/models/edit/${_id}`)}
+              onClick={() => navigate(`/update-model/${_id}`)}
               className="btn btn-warning"
             >
               Edit
