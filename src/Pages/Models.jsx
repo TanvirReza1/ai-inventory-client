@@ -62,11 +62,11 @@ const Models = () => {
   }
 
   return (
-    <div className="p-6">
+    <div className="lg:w-10/12 mx-auto p-6">
       <h1 className="text-3xl font-bold text-center mb-6">All AI Models</h1>
 
       {/* ✅ Search and Filter controls */}
-      <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row justify-center items-center  gap-4 mb-6">
         {/* ✅ Search Bar */}
         <input
           type="text"
@@ -95,7 +95,7 @@ const Models = () => {
 
       {/* ✅ Display Filtered Models */}
       {filteredModels.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid text-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredModels.map((model) => (
             <div
               key={model._id}

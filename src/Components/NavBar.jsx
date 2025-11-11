@@ -1,17 +1,28 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom"; // ✅ use react-router-dom, not "react-router"
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../Contexts/AuthContext";
 import { toast } from "react-hot-toast";
 import logo from "../assets/logo.jpg";
+import { FaSun, FaMoon } from "react-icons/fa";
 
 const NavBar = () => {
-  const { user, signOutUser } = useContext(AuthContext); // ✅ use useContext, not use()
+  const { user, signOutUser } = useContext(AuthContext);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  // 🌗 Apply theme to HTML and persist in localStorage
+  useEffect(() => {
+    const html = document.querySelector("html");
+    html.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const handleThemeToggle = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
 
   const handleLogout = () => {
     signOutUser()
-      .then(() => {
-        toast.success("Logged out successfully");
-      })
+      .then(() => toast.success("Logged out successfully"))
       .catch((error) => {
         console.error("Logout error:", error.message);
         toast.error("Logout failed");
@@ -20,9 +31,7 @@ const NavBar = () => {
 
   return (
     <div className="navbar bg-base-100 shadow-sm px-4">
-      {/* Navbar Start */}
       <div className="navbar-start">
-        {/* Mobile dropdown */}
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
             <svg
@@ -56,7 +65,6 @@ const NavBar = () => {
           </ul>
         </div>
 
-        {/* App Name */}
         <Link
           to="/"
           className="flex items-center gap-2 hover:opacity-90 transition"
@@ -74,7 +82,6 @@ const NavBar = () => {
         </Link>
       </div>
 
-      {/* Navbar Center (Desktop Menu) */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
@@ -89,8 +96,22 @@ const NavBar = () => {
         </ul>
       </div>
 
-      {/* Navbar End (User Section) */}
-      <div className="navbar-end">
+      <div className="navbar-end flex items-center gap-3">
+        {/* 🌗 Theme Toggle Button */}
+        <button
+          onClick={handleThemeToggle}
+          className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:scale-110 transition"
+          title={
+            theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"
+          }
+        >
+          {theme === "light" ? (
+            <FaMoon className="text-gray-800" />
+          ) : (
+            <FaSun className="text-yellow-400" />
+          )}
+        </button>
+
         {user ? (
           <div className="dropdown dropdown-end">
             <div
@@ -101,9 +122,8 @@ const NavBar = () => {
               <div className="w-10 rounded-full">
                 <img
                   src={
-                    user.photoURL
-                      ? user.photoURL
-                      : "https://img.icons8.com/?size=100&id=12438&format=png"
+                    user.photoURL ||
+                    "https://img.icons8.com/?size=100&id=12438&format=png"
                   }
                   alt="User Profile"
                   referrerPolicy="no-referrer"
