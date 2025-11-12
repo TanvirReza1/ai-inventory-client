@@ -18,7 +18,7 @@ const Home = () => {
       <Slide></Slide>
 
       {/* ✅ Dynamic Section */}
-      <section>
+      <section className="w-10/12 mx-auto">
         <h2 className="text-3xl font-bold mb-6 text-center">
           Featured AI Models
         </h2>
@@ -44,7 +44,7 @@ const Home = () => {
       </section>
 
       {/* 🧩 Static Section 1 */}
-      <section className=" p-8 rounded-xl">
+      <section className="p-8 rounded-xl">
         <h2 className="text-3xl text-white-700 font-bold mb-4 text-center">
           About AI Models
         </h2>

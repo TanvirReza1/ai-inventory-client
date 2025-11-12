@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { createBrowserRouter } from "react-router";
 import RootLayout from "../Layout/RootLayout";
 import LogIn from "../Pages/LogIn";
@@ -12,35 +13,51 @@ import AddModel from "../Pages/AddModel";
 import PrivateRoute from "../Private/PrivateRoute";
 import ErrorPage from "../Pages/ErrorPage";
 
+// ✅ Title Wrapper Component
+const WithTitle = ({ Component, title }) => {
+  useEffect(() => {
+    document.title = `${title} | AI Model Inventory`;
+  }, [title]);
+  return <Component />;
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
     Component: RootLayout,
     children: [
-      { index: true, Component: Home },
-      { path: "home", Component: Home },
-      { path: "logIn", Component: LogIn },
-      { path: "register", Component: Register },
-      { path: "models", Component: Models },
+      { index: true, element: <WithTitle Component={Home} title="Home" /> },
+      { path: "home", element: <WithTitle Component={Home} title="Home" /> },
+      {
+        path: "logIn",
+        element: <WithTitle Component={LogIn} title="Log In" />,
+      },
+      {
+        path: "register",
+        element: <WithTitle Component={Register} title="Register" />,
+      },
+      {
+        path: "models",
+        element: <WithTitle Component={Models} title="Models" />,
+      },
 
       {
         path: "/models/:id",
         element: (
           <PrivateRoute>
-            <ModelDetails />
+            <WithTitle Component={ModelDetails} title="Model Details" />
           </PrivateRoute>
         ),
-
         loader: ({ params }) =>
           fetch(
             `https://ai-model-inventory-server-omega.vercel.app/models/${params.id}`
-          ), //
+          ),
       },
       {
         path: "/update-model/:id",
         element: (
           <PrivateRoute>
-            <UpdateModel></UpdateModel>
+            <WithTitle Component={UpdateModel} title="Update Model" />
           </PrivateRoute>
         ),
       },
@@ -48,7 +65,7 @@ const router = createBrowserRouter([
         path: "/my-models",
         element: (
           <PrivateRoute>
-            <MyModels></MyModels>
+            <WithTitle Component={MyModels} title="My Models" />
           </PrivateRoute>
         ),
       },
@@ -56,7 +73,7 @@ const router = createBrowserRouter([
         path: "/my-purchase",
         element: (
           <PrivateRoute>
-            <MyModelPurchases></MyModelPurchases>
+            <WithTitle Component={MyModelPurchases} title="My Purchases" />
           </PrivateRoute>
         ),
       },
@@ -64,15 +81,16 @@ const router = createBrowserRouter([
         path: "add-model",
         element: (
           <PrivateRoute>
-            <AddModel></AddModel>
+            <WithTitle Component={AddModel} title="Add Model" />
           </PrivateRoute>
         ),
       },
       {
         path: "*",
-        Component: ErrorPage,
+        element: <WithTitle Component={ErrorPage} title="404 - Not Found" />,
       },
     ],
   },
 ]);
+
 export default router;
