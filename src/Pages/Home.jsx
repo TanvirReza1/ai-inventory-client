@@ -7,7 +7,7 @@ const Home = () => {
   const [models, setModels] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/latest")
+    fetch("https://ai-model-inventory-server-omega.vercel.app/latest")
       .then((res) => res.json())
       .then((data) => setModels(data))
       .catch((err) => console.error("Error fetching models:", err));

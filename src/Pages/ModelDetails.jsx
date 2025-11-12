@@ -38,11 +38,14 @@ const ModelDetails = () => {
       date: new Date(),
     };
 
-    const res = await fetch("http://localhost:3000/purchase", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(purchaseData),
-    });
+    const res = await fetch(
+      "https://ai-model-inventory-server-omega.vercel.app/purchase",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(purchaseData),
+      }
+    );
 
     if (res.ok) {
       setPurchaseCount((prev) => prev + 1);
@@ -64,7 +67,7 @@ const ModelDetails = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/models/${_id}?email=${user.email}`,
+        `https://ai-model-inventory-server-omega.vercel.app/models/${_id}?email=${user.email}`,
         {
           method: "DELETE",
           headers: {

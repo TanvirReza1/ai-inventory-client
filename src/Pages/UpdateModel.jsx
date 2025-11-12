@@ -8,12 +8,16 @@ const UpdateModel = () => {
   const navigate = useNavigate();
   const [model, setModel] = useState(null);
   const { user } = use(AuthContext);
+  const [loading, setLoading] = useState(true);
 
   // ✅ Fetch the current model data to pre-fill the form
   useEffect(() => {
-    fetch(`http://localhost:3000/models/${id}`)
+    fetch(`https://ai-model-inventory-server-omega.vercel.app/models/${id}`)
       .then((res) => res.json())
-      .then((data) => setModel(data))
+      .then((data) => {
+        setModel(data);
+        setLoading(false);
+      })
       .catch((err) => console.error("Error fetching model:", err));
   }, [id]);
 
@@ -30,7 +34,7 @@ const UpdateModel = () => {
       image: form.image.value,
     };
 
-    fetch(`http://localhost:3000/models/${id}`, {
+    fetch(`https://ai-model-inventory-server-omega.vercel.app/models/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -40,7 +44,7 @@ const UpdateModel = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.modifiedCount > 0) {
+        if (data.success) {
           Swal.fire({
             icon: "success",
             title: "Updated Successfully!",
@@ -61,10 +65,9 @@ const UpdateModel = () => {
       .catch((err) => console.error("Error updating model:", err));
   };
 
-  if (!model) {
+  if (loading) {
     return <div className="text-center mt-10">Loading...</div>;
   }
-
   return (
     <div className="max-w-2xl mx-auto shadow-md p-6 rounded-lg mt-10">
       <h2 className="text-2xl font-semibold mb-4 text-center">Update Model</h2>

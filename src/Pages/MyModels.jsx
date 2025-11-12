@@ -11,7 +11,9 @@ const MyModels = () => {
   useEffect(() => {
     if (!user?.email) return;
 
-    fetch(`http://localhost:3000/models/user/${user.email}`)
+    fetch(
+      `https://ai-model-inventory-server-omega.vercel.app/models/user/${user.email}`
+    )
       .then((res) => res.json())
       .then((data) => setModels(data))
       .catch((err) => console.error("Error fetching user's models:", err))

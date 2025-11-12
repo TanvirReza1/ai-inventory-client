@@ -12,7 +12,7 @@ const Models = () => {
 
   // ✅ Fetch all models
   useEffect(() => {
-    fetch("http://localhost:3000/models")
+    fetch("https://ai-model-inventory-server-omega.vercel.app/models")
       .then((res) => res.json())
       .then((data) => {
         setModels(data);
@@ -43,7 +43,7 @@ const Models = () => {
 
   // ✅ Combined filtering logic (both search + framework)
   const applyFilters = (search, framework) => {
-    let url = `http://localhost:3000/models?`;
+    let url = `https://ai-model-inventory-server-omega.vercel.app/models?`;
     if (search) url += `search=${search}&`;
     if (framework && framework !== "All") url += `framework=${framework}`;
 

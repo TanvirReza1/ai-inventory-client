@@ -9,7 +9,9 @@ const MyModelPurchases = () => {
 
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:3000/purchases/${user.email}`)
+      fetch(
+        `https://ai-model-inventory-server-omega.vercel.app/purchases/${user.email}`
+      )
         .then((res) => res.json())
         .then((data) => setPurchasedModels(data))
         .catch((err) => console.error("Error fetching purchased models:", err))
@@ -36,7 +38,7 @@ const MyModelPurchases = () => {
           You haven’t purchased any models yet.
         </p>
       ) : (
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid w-10/11 mx-auto md:grid-cols-2 lg:grid-cols-3 gap-6">
           {purchasedModels.map((model) => (
             <div
               key={model._id}

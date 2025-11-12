@@ -32,7 +32,9 @@ const router = createBrowserRouter([
         ),
 
         loader: ({ params }) =>
-          fetch(`http://localhost:3000/models/${params.id}`), //
+          fetch(
+            `https://ai-model-inventory-server-omega.vercel.app/models/${params.id}`
+          ), //
       },
       {
         path: "/update-model/:id",
