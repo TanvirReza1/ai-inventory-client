@@ -114,6 +114,11 @@ const NavBar = () => {
               </li>
             </>
           )}
+          {user && (
+            <li>
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
+          )}
         </ul>
       </div>
 
@@ -153,7 +158,7 @@ const NavBar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow"
+              className="menu menu-sm dropdown-content bg-base-100 text-base-content rounded-box mt-3 w-52 p-2 shadow"
             >
               <li className="border-b pb-2">
                 <span className="font-semibold">{user.displayName}</span>
@@ -165,6 +170,12 @@ const NavBar = () => {
               <li>
                 <Link to="/my-models">My Models</Link>
               </li>
+              {user && (
+                <li>
+                  <Link to="/dashboard">Dashboard</Link>
+                </li>
+              )}
+
               <li>
                 <button onClick={handleLogout}>Logout</button>
               </li>

@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "../assets/logo.jpg";
 import { FaSquareXTwitter } from "react-icons/fa6";
+import { Link } from "react-router";
 
 const Footer = () => {
   const repos = [
@@ -86,6 +87,24 @@ const Footer = () => {
                 <span className="hidden sm:inline">{r.name}</span>
               </a>
             ))}
+          </div>
+        </div>
+
+        {/* Quick Links */}
+        <div className="flex flex-col items-center md:items-start">
+          <div className="mb-2 font-medium">Quick Links</div>
+          <div className="flex flex-col gap-2 text-sm">
+            <Link to="/about" className="hover:text-primary transition">
+              About Us
+            </Link>
+
+            <Link to="/contact" className="hover:text-primary transition">
+              Contact
+            </Link>
+
+            <Link to="/privacy" className="hover:text-primary transition">
+              Privacy Policy
+            </Link>
           </div>
         </div>
 

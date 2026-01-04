@@ -12,6 +12,11 @@ import MyModelPurchases from "../Pages/MyPurchase";
 import AddModel from "../Pages/AddModel";
 import PrivateRoute from "../Private/PrivateRoute";
 import ErrorPage from "../Pages/ErrorPage";
+import DashboardLayout from "../Pages/DashboardLayout/DashboardLayout";
+import Overview from "../Pages/DashboardLayout/Overview";
+import About from "../Pages/About";
+import Contact from "../Pages/Contact";
+import Privacy from "../Pages/Privacy";
 
 // ✅ Title Wrapper Component
 const WithTitle = ({ Component, title }) => {
@@ -28,6 +33,19 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <WithTitle Component={Home} title="Home" /> },
       { path: "home", element: <WithTitle Component={Home} title="Home" /> },
+      {
+        path: "about",
+        element: <WithTitle Component={About} title="About" />,
+      },
+      {
+        path: "contact",
+        element: <WithTitle Component={Contact} title="Contact" />,
+      },
+      {
+        path: "privacy",
+        element: <WithTitle Component={Privacy} title="Privacy Policy" />,
+      },
+
       {
         path: "logIn",
         element: <WithTitle Component={LogIn} title="Log In" />,
@@ -57,6 +75,7 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+
       {
         path: "/my-models",
         element: (
@@ -85,6 +104,23 @@ const router = createBrowserRouter([
         path: "*",
         element: <WithTitle Component={ErrorPage} title="404 - Not Found" />,
       },
+    ],
+  },
+
+  // 🔐 DASHBOARD ROUTES (SEPARATE)
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
+    children: [
+      { index: true, element: <Overview /> },
+      { path: "my-models", element: <MyModels /> },
+      { path: "my-purchase", element: <MyModelPurchases /> },
+      { path: "add-model", element: <AddModel /> },
+      { path: "update-model/:id", element: <UpdateModel /> },
     ],
   },
 ]);
