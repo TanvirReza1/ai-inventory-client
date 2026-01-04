@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Contexts/AuthContext";
 import { toast } from "react-hot-toast";
@@ -7,6 +7,8 @@ const LogIn = () => {
   const { signInUser, signInGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
+  const emailRef = useRef();
+  const passwordRef = useRef();
 
   // Redirect after login (if user came from a private route)
   const from = location.state?.from?.pathname || "/";
@@ -56,6 +58,7 @@ const LogIn = () => {
           <fieldset className="fieldset">
             <label className="label">Email</label>
             <input
+              ref={emailRef}
               type="email"
               name="email"
               className="input input-bordered w-full"
@@ -65,6 +68,7 @@ const LogIn = () => {
 
             <label className="label">Password</label>
             <input
+              ref={passwordRef}
               type="password"
               name="password"
               className="input input-bordered w-full"
@@ -84,6 +88,19 @@ const LogIn = () => {
             >
               Login
             </button>
+
+            <div className="mt-4">
+              <button
+                type="button"
+                className="btn btn-outline w-full"
+                onClick={() => {
+                  emailRef.current.value = "demo.user@example.com";
+                  passwordRef.current.value = "User@123";
+                }}
+              >
+                Demo User
+              </button>
+            </div>
           </fieldset>
         </form>
 

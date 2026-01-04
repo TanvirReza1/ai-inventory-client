@@ -2,56 +2,89 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Models = () => {
-  // ✅ States for filtering and searching
+  // ================= STATES =================
   const [models, setModels] = useState([]);
   const [filteredModels, setFilteredModels] = useState([]);
+
   const [frameworks, setFrameworks] = useState([]);
+  const [useCases, setUseCases] = useState([]);
+
   const [selectedFramework, setSelectedFramework] = useState("All");
-  const [searchTerm, setSearchTerm] = useState(""); // ✅ Search term state
+  const [selectedUseCase, setSelectedUseCase] = useState("All");
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOption, setSortOption] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
   const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch all models
+  // ================= FETCH MODELS =================
   useEffect(() => {
     fetch("https://ai-model-inventory-server-omega.vercel.app/models")
       .then((res) => res.json())
       .then((data) => {
         setModels(data);
         setFilteredModels(data);
-        const uniqueFrameworks = [
-          "All",
-          ...new Set(data.map((m) => m.framework)),
-        ];
-        setFrameworks(uniqueFrameworks);
+
+        setFrameworks(["All", ...new Set(data.map((m) => m.framework))]);
+        setUseCases(["All", ...new Set(data.map((m) => m.useCase))]);
       })
       .catch((err) => console.error("Error loading models:", err))
       .finally(() => setLoading(false));
   }, []);
 
-  // ✅ Filter by framework
-  const handleFilterChange = (e) => {
-    const selected = e.target.value;
-    setSelectedFramework(selected);
-    applyFilters(searchTerm, selected);
-  };
-
-  // ✅ Search functionality (fetch from backend using regex)
-  const handleSearch = async (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    applyFilters(value, selectedFramework);
-  };
-
-  // ✅ Combined filtering logic (both search + framework)
-  const applyFilters = (search, framework) => {
+  // ================= APPLY FILTERS =================
+  const applyFilters = (search, framework, useCase) => {
     let url = `https://ai-model-inventory-server-omega.vercel.app/models?`;
+
     if (search) url += `search=${search}&`;
-    if (framework && framework !== "All") url += `framework=${framework}`;
+    if (framework !== "All") url += `framework=${framework}&`;
+    if (useCase !== "All") url += `useCase=${useCase}`;
 
     fetch(url)
       .then((res) => res.json())
-      .then((data) => setFilteredModels(data))
-      .catch((err) => console.error("Error filtering models:", err));
+      .then((data) => {
+        setFilteredModels(data);
+        setCurrentPage(1);
+      })
+      .catch((err) => console.error("Filtering error:", err));
   };
+
+  // ================= HANDLERS =================
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    applyFilters(value, selectedFramework, selectedUseCase);
+  };
+
+  const handleFrameworkChange = (e) => {
+    const value = e.target.value;
+    setSelectedFramework(value);
+    applyFilters(searchTerm, value, selectedUseCase);
+  };
+
+  const handleUseCaseChange = (e) => {
+    const value = e.target.value;
+    setSelectedUseCase(value);
+    applyFilters(searchTerm, selectedFramework, value);
+  };
+
+  // ================= SORTING =================
+  const sortedModels = [...filteredModels].sort((a, b) => {
+    if (sortOption === "name") return a.name.localeCompare(b.name);
+    if (sortOption === "date")
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    return 0;
+  });
+
+  // ================= PAGINATION =================
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedModels = sortedModels.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   if (loading) {
     return (
@@ -61,13 +94,14 @@ const Models = () => {
     );
   }
 
+  // ================= UI =================
   return (
     <div className="lg:w-10/12 mx-auto p-6">
-      <h1 className="text-3xl font-bold text-center mb-6">All AI Models</h1>
+      <h1 className="text-3xl font-bold text-center mb-6">Explore AI Models</h1>
 
-      {/* ✅ Search and Filter controls */}
-      <div className="flex flex-col sm:flex-row justify-center items-center  gap-4 mb-6">
-        {/* ✅ Search Bar */}
+      {/* SEARCH, FILTERS, SORT */}
+      <div className="flex flex-col lg:flex-row justify-center items-center gap-4 mb-8">
+        {/* Search */}
         <input
           type="text"
           placeholder="Search by model name..."
@@ -76,48 +110,75 @@ const Models = () => {
           className="input input-bordered w-full max-w-xs"
         />
 
-        {/* ✅ Framework Filter */}
-        <div className="flex items-center gap-3">
-          <label className="font-medium">Framework:</label>
-          <select
-            value={selectedFramework}
-            onChange={handleFilterChange}
-            className="select select-bordered w-full max-w-xs"
-          >
-            {frameworks.map((fw) => (
-              <option key={fw} value={fw}>
-                {fw}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Framework Filter */}
+        <select
+          value={selectedFramework}
+          onChange={handleFrameworkChange}
+          className="select select-bordered w-full max-w-xs"
+        >
+          {frameworks.map((fw) => (
+            <option key={fw} value={fw}>
+              {fw}
+            </option>
+          ))}
+        </select>
+
+        {/* Use Case Filter */}
+        <select
+          value={selectedUseCase}
+          onChange={handleUseCaseChange}
+          className="select select-bordered w-full max-w-xs"
+        >
+          {useCases.map((uc) => (
+            <option key={uc} value={uc}>
+              {uc}
+            </option>
+          ))}
+        </select>
+
+        {/* Sort */}
+        <select
+          value={sortOption}
+          onChange={(e) => setSortOption(e.target.value)}
+          className="select select-bordered w-full max-w-xs"
+        >
+          <option value="">Sort By</option>
+          <option value="name">Name (A → Z)</option>
+          <option value="date">Newest First</option>
+        </select>
       </div>
 
-      {/* ✅ Display Filtered Models */}
-      {filteredModels.length > 0 ? (
-        <div className="grid text-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredModels.map((model) => (
+      {/* MODELS GRID */}
+      {paginatedModels.length > 0 ? (
+        <div className="grid text-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {paginatedModels.map((model) => (
             <div
               key={model._id}
-              className="border rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition"
+              className="border rounded-2xl shadow-md hover:shadow-lg transition flex flex-col"
             >
               <img
                 src={model.image}
                 alt={model.name}
                 className="h-48 w-full object-cover"
               />
-              <div className="p-4">
+
+              <div className="p-4 flex flex-col flex-1">
                 <h2 className="text-xl font-semibold">{model.name}</h2>
-                <p className="text-gray-700">
+
+                <p className="text-sm text-gray-600 my-2">
+                  {model.description?.slice(0, 80)}...
+                </p>
+
+                <p>
                   <strong>Framework:</strong> {model.framework}
                 </p>
-                <p className="text-gray-700">
+                <p>
                   <strong>Use Case:</strong> {model.useCase}
                 </p>
 
                 <Link
                   to={`/models/${model._id}`}
-                  className="mt-3 inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                  className="mt-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                 >
                   View Details
                 </Link>
@@ -128,6 +189,25 @@ const Models = () => {
       ) : (
         <p className="text-center text-gray-600">No models found.</p>
       )}
+
+      {/* PAGINATION */}
+      <div className="flex justify-center gap-4 mt-10">
+        <button
+          className="btn"
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((p) => p - 1)}
+        >
+          Prev
+        </button>
+
+        <button
+          className="btn"
+          disabled={startIndex + itemsPerPage >= sortedModels.length}
+          onClick={() => setCurrentPage((p) => p + 1)}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

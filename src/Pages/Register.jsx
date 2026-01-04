@@ -18,9 +18,9 @@ const Register = () => {
     setPasswordError("");
 
     const form = e.target;
-    const name = form.name.value.trim();
-    const email = form.email.value.trim();
-    const photoURL = form.photoURL.value.trim();
+    const name = form.name.value;
+    const email = form.email.value;
+    const photoURL = form.photoURL.value;
     const password = form.password.value;
 
     // 🔍 Password validation
@@ -47,28 +47,27 @@ const Register = () => {
       .then((result) => {
         console.log(result);
         // 🔄 Update display name & photo
+        const finalPhotoURL =
+          photoURL && photoURL.startsWith("http")
+            ? photoURL
+            : "https://img.icons8.com/?size=100&id=14736&format=png";
+
         updateProfile(auth.currentUser, {
           displayName: name || "Anonymous User",
-          photoURL:
-            photoURL || "https://img.icons8.com/?size=100&id=14736&format=png",
+          photoURL: finalPhotoURL,
         })
-          .then(() => {
-            // 👇 update context manually
-            setUser({
-              ...auth.currentUser,
-              displayName: name || "Anonymous User",
-              photoURL:
-                photoURL ||
-                "https://img.icons8.com/?size=100&id=14736&format=png",
-            });
+          .then(async () => {
+            // 🔄 Force Firebase to reload user data
+            await auth.currentUser.reload();
+
+            // ✅ Now get the fresh user
+            setUser(auth.currentUser);
 
             toast.success("Registration successful!");
             navigate("/");
           })
-
           .catch((error) => {
-            console.error("Profile update error:", error.message);
-            toast.error("Could not update profile info.");
+            toast.error(error.message);
           });
       })
 

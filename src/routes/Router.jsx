@@ -43,11 +43,7 @@ const router = createBrowserRouter([
 
       {
         path: "/models/:id",
-        element: (
-          <PrivateRoute>
-            <WithTitle Component={ModelDetails} title="Model Details" />
-          </PrivateRoute>
-        ),
+        element: <WithTitle Component={ModelDetails} title="Model Details" />,
         loader: ({ params }) =>
           fetch(
             `https://ai-model-inventory-server-omega.vercel.app/models/${params.id}`

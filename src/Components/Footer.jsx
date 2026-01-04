@@ -99,7 +99,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.name}
-                className="hover:text-primary transition"
+                className="hover:text-primary hover:scale-110 transition-transform"
               >
                 {s.svg}
               </a>

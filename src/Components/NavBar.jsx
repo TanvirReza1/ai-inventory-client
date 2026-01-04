@@ -143,7 +143,7 @@ const NavBar = () => {
               <div className="w-10 rounded-full">
                 <img
                   src={
-                    user.photoURL ||
+                    user?.photoURL ||
                     "https://img.icons8.com/?size=100&id=12438&format=png"
                   }
                   alt="User Profile"

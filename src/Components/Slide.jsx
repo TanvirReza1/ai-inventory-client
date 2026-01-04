@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { FaChevronDown } from "react-icons/fa";
 
 const Slide = () => {
-  // 👇 Use static data here
   const banners = [
     {
       id: 1,
@@ -11,30 +12,29 @@ const Slide = () => {
     },
     {
       id: 2,
-      image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d", // online image
+      image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d",
       title: "Boost Your Productivity",
-      desc: "Use pre-trained models to save time and resources on your next project.",
+      desc: "Use pre-trained models to save time and resources.",
     },
     {
       id: 3,
       image: "/images/banner3.jpg",
       title: "Manage Models Seamlessly",
-      desc: "Track, update, and organize your models in one platform.",
+      desc: "Track, update, and organize models in one platform.",
     },
   ];
 
   const [current, setCurrent] = useState(0);
 
-  // Auto-slide every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % banners.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, [banners.length]);
+  }, []);
 
   return (
-    <div className="relative  h-[70vh] overflow-hidden rounded-2xl shadow-lg">
+    <section className="relative h-[70vh] overflow-hidden">
       {banners.map((item, index) => (
         <div
           key={item.id}
@@ -42,37 +42,43 @@ const Slide = () => {
             index === current ? "opacity-100" : "opacity-0"
           }`}
         >
-          <img
-            src={item.image}
-            alt={item.title}
-            className="w-full h-full object-cover"
-          />
+          <img src={item.image} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center text-white px-4">
-            <h2 className="text-4xl md:text-6xl font-bold mb-3 drop-shadow-md">
+            <h2 className="text-4xl md:text-6xl font-bold mb-4">
               {item.title}
             </h2>
-            <p className="text-lg md:text-xl max-w-2xl">{item.desc}</p>
+            <p className="max-w-2xl mb-6">{item.desc}</p>
+
+            {/* CTA */}
+            <Link to="/models" className="btn btn-primary btn-lg">
+              Explore Models
+            </Link>
           </div>
         </div>
       ))}
 
-      {/* Navigation buttons */}
+      {/* Manual Controls */}
       <button
         onClick={() =>
           setCurrent((prev) => (prev - 1 + banners.length) % banners.length)
         }
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-70 text-white p-3 rounded-full"
+        className="absolute left-4 top-1/2 text-white text-2xl"
       >
         ❮
       </button>
 
       <button
         onClick={() => setCurrent((prev) => (prev + 1) % banners.length)}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-70 text-white p-3 rounded-full"
+        className="absolute right-4 top-1/2 text-white text-2xl"
       >
         ❯
       </button>
-    </div>
+
+      {/* Scroll Hint */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce text-white">
+        <FaChevronDown size={24} />
+      </div>
+    </section>
   );
 };
 
