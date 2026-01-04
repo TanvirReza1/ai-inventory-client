@@ -94,8 +94,8 @@ const LogIn = () => {
                 type="button"
                 className="btn btn-outline w-full"
                 onClick={() => {
-                  emailRef.current.value = "demo.user@example.com";
-                  passwordRef.current.value = "User@123";
+                  emailRef.current.value = "demo.user@gmail.com";
+                  passwordRef.current.value = "DemoUser@123";
                 }}
               >
                 Demo User
