@@ -1,7 +1,7 @@
 🧠 AI Model Inventory
 🌐 Live Site URL
 
-🔗stately-salamander-5e1fe6.netlify.app
+🔗subtle-sprite-aab854.netlify.app
 
 📖 About the Project
 

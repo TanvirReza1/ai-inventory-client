@@ -67,17 +67,14 @@ const ModelDetails = () => {
 
     try {
       const res = await fetch(
-        `https://ai-model-inventory-server-omega.vercel.app/models/${_id}?email=${user.email}`,
+        `https://ai-model-inventory-server-omega.vercel.app/models/${_id}`,
         {
           method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${user?.accessToken}`,
-          },
         }
       );
       const data = await res.json();
 
-      if (res.ok && data.deletedCount > 0) {
+      if (res.ok && data.success) {
         Swal.fire("Deleted!", "Model has been removed.", "success");
         navigate("/models");
       } else {
