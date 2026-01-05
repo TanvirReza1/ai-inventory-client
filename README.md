@@ -2,11 +2,6 @@
 
 ## 🔗 Live Links & Resources
 
-🔗subtle-sprite-aab854.netlify.app
-=======
-## 🔗 Live Links & Resources
->>>>>>> ea7c3c7b85c4952a9ddf5a2428843bfff5fc6880
-
 - 🌐 **Live Website:** https://stately-salamander-5e1fe6.netlify.app  
 - 📁 **Client Repository:** https://github.com/TanvirReza1/ai-inventory-client.git  
 - 📁 **Server Repository:** https://github.com/TanvirReza1/ai-inventory-server.git  
