@@ -1,6 +1,7 @@
 # 🧠 AI Model Inventory
 
-<<<<<<< HEAD
+## 🔗 Live Links & Resources
+
 🔗subtle-sprite-aab854.netlify.app
 =======
 ## 🔗 Live Links & Resources
